@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Crossword Designer</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+  <header>
+    <div class="head-tools">
+      <ul class="controls">
+        <li class="preview-hide">
+          <input
+            id="mirrorBlocks"
+            type="checkbox"
+            onclick="autoMirror = !autoMirror"
+            checked
+          ><label for="mirrorBlocks">Auto Mirror Blocks</label>
+        </li>
+        <li class="preview-hide">
+          Grid Size
+          <button onclick="resize(false)">-</button>
+          <button onclick="resize(true)">+</button>
+        </li>
+        <li>
+          <button onclick="document.body.classList.toggle('preview')">Toggle Preview</button>
+        </li>
+        <!-- <li>
+          Export as <button> Image </button>
+        </li> -->
+      </ul>
+      <textarea class="preview-hide" placeholder="Notes..."></textarea>
+    </div>
+    <input class="cross-title" type="text" placeholder="Crossword Title" />
+  </header>
+
+  <table id="grid"></table>
+
+  <section>
+    <div class="col">
+      <h2>Across</h2>
+      <ol id="across"></ol>
+    </div>
+    <div class="col">
+      <h2> Down </h2>
+      <ol id="down"></ol>
+    </div>
+  </section>
+
+  <script  src="./script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,208 @@
+body {
+  font-family: "Times New Roman";
+  margin: 0 auto;
+  width: 1080px;
+}
+
+header {
+  text-align: left;
+}
+
+header .head-tools {
+  min-height: 60px;
+}
+
+header .head-tools > * {
+  float: left;
+}
+
+header .head-tools textarea {
+  width: calc(100% - 220px);
+  margin: 16px;
+  min-height: 66px;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+  color: #777;
+  padding: 8px;
+  font-size: 0.9em;
+}
+
+.col {
+  float: left;
+  text-align: left;
+  padding-left: 40px;
+  width: 230px;
+}
+
+section, table {
+  float: left;
+}
+
+.cross-title {
+  margin: 0 10px 20px;
+  font-size: 30px;
+  border: none;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+td {
+  border: 1px solid black;
+  padding: 0;
+  position: relative;
+}
+td input {
+  width: 50px;
+  height: 50px;
+  border: none;
+  text-align: center;
+  font-size: 26px;
+}
+td span {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 14px;
+}
+input.block {
+  background-color: black;
+}
+
+.controls {
+  list-style: none;
+  padding-left: 0;
+}
+
+.controls li {
+  padding-bottom: 6px;
+}
+
+button,
+[type=button] {
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 2px;
+  min-width: 20px;
+  line-height: 20px;
+  padding: 0 5px;
+  text-align: center;
+}
+button:hover,
+[type=button]:hover {
+  background: black;
+  color: white;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  position: relative;
+  width: 0px;
+  margin: -10px 26px 0 0;
+}
+input[type="checkbox"]:before {
+  position: absolute;
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 1px solid black;
+  border-radius: 2px;
+  background-color: white;
+  vertical-align: middle;
+  cursor: pointer;
+}
+input[type="checkbox"]:checked:after {
+  position: absolute;
+  content: '';
+  border: solid black;
+  border-width: 0 1px 1px 0;
+  width: 4px;
+  height: 11px;
+  margin: 2px 8px;
+  transform: rotate(45deg);
+}
+
+button.tool {
+  position: relative;
+}
+button.tool:after {
+  visibility: hidden;
+  opacity: 0;
+  color: black;
+  background: white;
+  box-shadow: 0 1px 5px #0004;
+  position: absolute;
+  white-space: nowrap;
+  top: 50%;
+  left: 90%;
+  padding: 2px 4px;
+  border-radius: 2px;
+  transition: none;
+  font-size: 0.9em;
+}
+button.tool:hover:after {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    visibility 0s linear 0.8s,
+    opacity 0.2s linear 0.8s;
+}
+button.tool.anag:after {
+  content: 'Get Anagrams';
+}
+button.tool.thes:after {
+  content: 'Search Thesaurus';
+}
+button.tool.solv:after {
+  content: 'Get Solutions';
+}
+button.tool.dict:after {
+  content: 'Get Definition';
+}
+
+.clue {
+  display: block;
+  width: 100%;
+}
+
+#across [type=button],
+#down [type=button] {
+  width: 20px;
+  margin-left: 2px;
+  float: right;
+}
+
+textarea {
+  overflow: hidden;
+  border: none;
+  resize: none;
+  width: calc(100% - 70px);
+  font-family: "Times New Roman";
+  font-size: 16px;
+  height: 18px;
+  margin-bottom: 5px;
+}
+
+h1 {
+  margin: 24px 0 -10px 20px;
+}
+
+h2, h3 {
+  margin: 0 0 -10px 0;
+  font-family: Arial;
+}
+
+ol {
+  padding-left: 20px;
+  margin-bottom: 24px;
+}
+
+li {
+  padding-left: 10px;
+}
+
+body.preview .preview-hide {
+  display: none;
+}
