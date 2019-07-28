@@ -206,3 +206,7 @@ li {
 body.preview .preview-hide {
   display: none;
 }
+
+body.preview table input {
+  color: #0000;
+}
