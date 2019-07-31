@@ -2,7 +2,7 @@ let app = new Vue({
   el: '#app',
   data: {
     size: 9,
-    title: "",
+    title: '',
     autoMirror: true,
     isPreview: false,
     grid: [],
@@ -215,9 +215,11 @@ let app = new Vue({
         e.preventDefault();
         if ((e.keyCode === 37 || e.keyCode === 39) && this.dirSelect === 'down') {
           this.dirSelect = 'across';
+          this.activeAnswer = cell.answer.across.index;
           return;
         } else if ((e.keyCode === 38 || e.keyCode === 40) && this.dirSelect === 'across') {
           this.dirSelect = 'down';
+          this.activeAnswer = cell.answer.down.index;
           return;
         }
         let row = r,
