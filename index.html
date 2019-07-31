@@ -5,51 +5,116 @@
   <meta charset="UTF-8">
   <title>CrossCreator | A Crossword Maker</title>
   <link rel="stylesheet" href="./style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
 </head>
 
 <body>
-  <header>
-    <div class="head-tools">
-      <ul class="controls">
-        <li class="preview-hide">
-          <input
-            id="mirrorBlocks"
-            type="checkbox"
-            onclick="autoMirror = !autoMirror"
-            checked
-          ><label for="mirrorBlocks">Auto Mirror Blocks</label>
-        </li>
-        <li class="preview-hide">
-          Grid Size
-          <button onclick="resize(false)">-</button>
-          <button onclick="resize(true)">+</button>
-        </li>
-        <li>
-          <button onclick="document.body.classList.toggle('preview')">Toggle Preview</button>
-        </li>
-        <!-- <li>
-          Export as <button> Image </button>
-        </li> -->
-      </ul>
-      <textarea class="preview-hide" placeholder="Notes..."></textarea>
-    </div>
-    <input class="cross-title" type="text" placeholder="Crossword Title" />
-  </header>
-
-  <table id="grid"></table>
-
+  <div id="app" :class="{ preview: isPreview }">
+    <header>
+      <div class="head-tools">
+        <ul class="controls">
+          <li class="preview-hide">
+            <input
+              id="mirrorBlocks"
+              type="checkbox"
+              @click="autoMirror = !autoMirror"
+              checked
+            ><label for="mirrorBlocks">Auto Mirror Blocks</label>
+          </li>
+          <li class="preview-hide">
+            Grid Size
+            <button @click="size -= 1">-</button>
+            <button @click="size += 1">+</button>
+          </li>
+          <li>
+            <button @click="isPreview = !isPreview">Toggle Preview</button>
+          </li>
+          <!-- <li>
+            Export as <button> Image </button>
+          </li> -->
+        </ul>
+        <textarea class="preview-hide" placeholder="Notes..."></textarea>
+      </div>
+      <input
+        class="cross-title"
+        placeholder="Puzzle Title"
+        type="text"
+        v-bind="title"
+      />
+    </header>
+  
+    <table id="grid">
+      <tbody ref="grid">
+        <tr v-for="(row, r) in grid">
+          <td
+            v-for="(cell, c) in row"
+            type="text"
+            maxlength="1"
+            tabIndex="0"
+            :class="{
+              'block': cell.isBlock,
+              'active': activeAnswer === cell.answer[dirSelect].index
+            }"
+            @keyup="cellKey($event, cell, r, c)"
+            @focus="activeAnswer = cell.answer[dirSelect].index"
+          >
+            <span>{{ cell.label }}</span>
+            {{ cell.letter }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
   <section>
-    <div class="col">
-      <h2>Across</h2>
-      <ol id="across"></ol>
-    </div>
-    <div class="col">
-      <h2> Down </h2>
-      <ol id="down"></ol>
-    </div>
-  </section>
+      <div v-for="dir in ['across', 'down']" class="col">
+        <h2>{{ dir }}</h2>
+        <ol :class="dir">
+         <li
+            v-for="(a, i) in answers[dir]"
+            :value="a.label"
+            :class="{ 'active': dir === dirSelect && activeAnswer === i }"
+          >
+            <span class="preview-hide"> Answer: {{ a.text }} </span>
+            <button
+              v-if="a.anagramable"
+              class="tool anag preview-hide"
+              @click="openSite('anag', a.text)"
+            >
+              A
+            </button>
+            <button
+              v-if="a.solvable"
+              class="tool solv preview-hide"
+              @click="openSite('solv', a.text)"
+            >
+              S
+            </button>
+            <button
+              v-if="a.complete"
+              class="tool thes preview-hide"
+              @click="openSite('thes', a.text)"
+            >
+              T
+            </button>
+            <button
+              v-if="a.complete"
+              class="tool dict preview-hide"
+              @click="openSite('dict', a.text)"
+            >
+              D
+            </button>
+            <textarea
+              class="clue"
+              placeholder="Clue..."
+              v-model="clues[dir][i]"
+            ></textarea>
+          </li>
+        </ol>
+      </div>
+    </section>
+  </div>
 
-  <script  src="./script.js"></script>
+  <script src="./script.js"></script>
 </body>
 
 </html>

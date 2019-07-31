@@ -1,7 +1,11 @@
 body {
-  font-family: "Times New Roman";
+  font-family: "Times New Roman", serif;;
   margin: 0 auto;
   width: 1080px;
+}
+
+*:focus {
+  outline: none;
 }
 
 header {
@@ -41,6 +45,7 @@ section, table {
 .cross-title {
   margin: 0 10px 20px;
   font-size: 30px;
+  width: 100%;
   border: none;
 }
 
@@ -52,22 +57,27 @@ td {
   border: 1px solid black;
   padding: 0;
   position: relative;
-}
-td input {
   width: 50px;
   height: 50px;
-  border: none;
   text-align: center;
   font-size: 26px;
+  font-family: Helvetica, sans-serif;
+}
+td:focus {
+  box-shadow: inset 0 0 0 2px dodgerblue;
+}
+td.block {
+  background-color: black;
+}
+td.active:not(.block) {
+  background-color: #d6e6f5;
 }
 td span {
   position: absolute;
   top: 5px;
   left: 5px;
   font-size: 14px;
-}
-input.block {
-  background-color: black;
+  font-family: "Times New Roman", serif;
 }
 
 .controls {
@@ -90,20 +100,24 @@ button,
   text-align: center;
 }
 button:hover,
-[type=button]:hover {
+[type=button]:hover,
+button:focus,
+[type=button]:focus {
   background: black;
   color: white;
   cursor: pointer;
 }
 
-input[type="checkbox"] {
+input[type="checkbox"]+label {
+  cursor: pointer;
   position: relative;
-  width: 0px;
-  margin: -10px 26px 0 0;
+  padding-left: 8px;
 }
-input[type="checkbox"]:before {
-  position: absolute;
+input[type="checkbox"]+label:before {
   content: '';
+  position: absolute;
+  z-index: 5;
+  left: -18px;
   display: inline-block;
   width: 18px;
   height: 18px;
@@ -113,15 +127,25 @@ input[type="checkbox"]:before {
   vertical-align: middle;
   cursor: pointer;
 }
-input[type="checkbox"]:checked:after {
-  position: absolute;
+input[type="checkbox"]:checked+label:after {
   content: '';
+  position: absolute;
+  left: -10px;
+  top: 2px;
+  z-index: 10;
   border: solid black;
   border-width: 0 1px 1px 0;
   width: 4px;
   height: 11px;
-  margin: 2px 8px;
   transform: rotate(45deg);
+}
+input[type="checkbox"]+label:hover:before,
+input[type="checkbox"]+label:focus:before {
+  background-color: black;
+}
+input[type="checkbox"]:checked+label:hover:after,
+input[type="checkbox"]:checked+label:focus:after {
+  border-color: white;
 }
 
 button.tool {
@@ -142,9 +166,12 @@ button.tool:after {
   transition: none;
   font-size: 0.9em;
 }
-button.tool:hover:after {
+button.tool:hover:after,
+button.tool:focus:after {
   visibility: visible;
   opacity: 1;
+  z-index: 10;
+  pointer-events: none;
   transition:
     visibility 0s linear 0.8s,
     opacity 0.2s linear 0.8s;
@@ -164,11 +191,11 @@ button.tool.dict:after {
 
 .clue {
   display: block;
-  width: 100%;
+  width: calc(100% - 4px);
 }
 
-#across [type=button],
-#down [type=button] {
+.across [type=button],
+.down [type=button] {
   width: 20px;
   margin-left: 2px;
   float: right;
@@ -191,6 +218,7 @@ h1 {
 
 h2, h3 {
   margin: 0 0 -10px 0;
+  text-transform: capitalize;
   font-family: Arial;
 }
 
@@ -203,10 +231,15 @@ li {
   padding-left: 10px;
 }
 
-body.preview .preview-hide {
+li.active,
+li.active textarea {
+  background-color: #d6e6f5;
+}
+
+#app.preview .preview-hide {
   display: none;
 }
 
-body.preview table input {
+#app.preview table input {
   color: #0000;
 }

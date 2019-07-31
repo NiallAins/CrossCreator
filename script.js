@@ -1,229 +1,295 @@
-let size = 9,
-    autoMirror = true;
-
-let table = document.getElementById('grid'),
-    across = document.getElementById('across'),
-    down = document.getElementById('down');
-
-let grid = [],
-    cells = [],
-    answers = [];
-
-function createGrid() {
-  table.innerHTML = '';
-  for (let y = 0; y < size; y++) {
-    let row = document.createElement('tr');
-    for (let x = 0; x < size; x++) {
-      row.innerHTML += `
-        <td>
-          <span></span>
-          <input
-            type="text"
-            maxlength="1"
-            onkeydown="cellKey(event, ${(y * size) + x})"
-          >
-        </td>
-      `;
-    }
-    table.appendChild(row);
-  }
-  grid = table.getElementsByTagName('input');
-  labels = table.getElementsByTagName('span');
-  drawNums();
-  getAnswers();
-  drawClues();
-}
-
-function cellKey(ev, index) {
-  switch (ev.keyCode) {
-    // Arrow Keys: U, D, L, R
-    case 38:
-      if (index >= size) {
-        grid[index - size].focus();
-      }
-      break;
-    case 40:
-      if (index + size < grid.length) {
-        grid[index + size].focus();
-      }
-      break;
-    case 37:
-      if (index % size !== 0) {
-        grid[index - 1].focus();
-      }
-      break;
-    case 39:
-      if (index % size !== size - 1) {
-        grid[index + 1].focus();
-      }
-      break;
-    //Backspace
-    case 8:
-      if (grid[index].value === '') {
-        toggleBlock(index);
-      } else {
-        grid[index].value = '';
-        getAnswers();
-        drawClues();
-      }
-      break;
-    //Space
-    case 32:
-      toggleBlock(index);
-      break;
-    //Enter
-    case 13:
-      toggleBlock(index);
-      break;
-    //Letters
-    default:
-      if (ev.keyCode >= 65 && ev.keyCode <= 90) {
-        if (grid[index].className === 'block') {
-          toggleBlock(index);
-        }
-        grid[index].value = ev.key.toUpperCase();
-        getAnswers();
-        drawClues();
-      }
-  }
-}
-
-function toggleBlock(index) {
-  grid[index].classList.toggle('block');
-  let oppIndex = (grid.length - 1) - index;
-  if (autoMirror && index !== oppIndex) {
-    grid[oppIndex].classList.toggle('block');
-  }
-  drawNums();
-  getAnswers();
-  drawClues();
-}
-
-function drawNums() {
-  let labelNum = 1;
-  answers = [];
-  for (let i = 0; i < labels.length; i++) {
-    let labeled = false;
-    if (grid[i].className !== 'block') {
-      //Across
-      if (
-        (i % size === 0 || grid[i - 1].className === 'block') &&
-        (i % size < size - 1 && grid[i + 1].className !== 'block')
-      ) {
-        answers.push({
-          start: i,
-          index: labelNum,
-          across: true
+let app = new Vue({
+  el: '#app',
+  data: {
+    size: 9,
+    title: "",
+    autoMirror: true,
+    isPreview: false,
+    grid: [],
+    clues: {
+      across: [],
+      down: [],
+    },
+    answers: {
+      across: [],
+      down: []
+    },
+    dirSelect: 'down',
+    activeAnswer: 1
+  },
+  created: function() {
+    for (let r = 0; r < this.size; r++) {
+      this.grid.push([]);
+      for (let c = 0; c < this.size; c++) {
+        this.grid[r].push({
+          isBlock: false,
+          label: '',
+          letter: '',
+          answer: {
+            across: -1,
+            down: -1
+          }
         });
-        labeled = true;
-      }
-      //Down  
-      if (
-        (i < size || grid[i - size].className === 'block') &&
-        (grid[i + size] && grid[i + size].className !== 'block')
-      ) {
-        answers.push({
-          start: i,
-          index: labelNum,
-          across: false
-        });
-        labeled = true;
-      }
-      if (labeled) {
-        labels[i].innerText = labelNum;
-        labelNum++;
-      } else {
-        labels[i].innerText = '';
       }
     }
-  }
-}
-
-function getAnswers() {
-  across.innerHTML = '';
-  down.innerHTML = '';
-  answers.forEach((a, i) => {
-    let answerStr = '',
-        cell = a.start;
-    if (a.across) {
-      do {
-        answerStr += grid[cell].value || '_ ';
-        cell++;
-      } while (cell % size !== 0 && grid[cell].className !== 'block');
-      answers[i].answerStr = answerStr;
-    } else {
-      while (cell < grid.length && grid[cell].className !== 'block') {
-        answerStr += grid[cell].value || '_ ';
-        cell += size;
-      }
-      answers[i].answerStr = answerStr;
-    }
-  });
-}
-
-function drawClues() {
-  across.innerHTML = '';
-  down.innerHTML = '';
-  answers.forEach(a => {
-    let content = `
-      <li value="${a.index}">
-        <span class="preview-hide"> Answer: ${a.answerStr} </span>
-    `;
-    if (a.answerStr.match(/[a-zA-Z]/)) {
-        if (a.answerStr.match(/[a-zA-Z]{3,}/)) {
-          content += `<button class="tool anag preview-hide" onclick="openSite('anag', '${a.answerStr}')">A</button>`;
+    this.updateNums();
+  },
+  watch: {
+    size: function(current, old) {
+      if (current > old) {
+        this.grid.push([]);
+        for (let i = 0; i < current; i++) {
+          this.grid[i].push({
+            isBlock: false,
+            label: '',
+            letter: '',
+            answer: {
+              across: -1,
+              down: -1
+            }
+          });
+          if (i !== current - 1) {
+            this.grid[current - 1].push({
+              isBlock: false,
+              label: '',
+              letter: '',
+              answer: {
+                across: -1,
+                down: -1
+              }
+            });
+          }
         }
-        if (a.answerStr.match(/_/)) {
-          content += `<button class="tool solv preview-hide" onclick="openSite('solv', '${a.answerStr}')">S</button>`;
+      } else {
+        this.grid.pop();
+        for (let i = 0; i < current; i++) {
+          this.grid[i].pop();
+        } 
+      }
+      this.updateNums();
+    }
+  },
+  methods: {
+    // Updates the numbers and answers whenever the grid layout changes
+    updateNums: function() {
+      let labelNum = 1;
+      this.answers = {
+        across: [],
+        down: []
+      };
+      this.grid.forEach((row, r) => {
+        row.forEach((cell, c) => {
+          let labeled = false;
+          c.label = '';
+          if (!cell.isBlock) {
+            //Across
+            if (
+              (c === 0 || row[c - 1].isBlock) &&
+              (c < this.size - 1 && !row[c + 1].isBlock)
+            ) {
+              labeled = true;
+              let ans = {
+                label: labelNum,
+                text: ''
+              };
+              for (let i = c; i < this.size; i++) {
+                if (row[i].isBlock) {
+                  row[i].answer.across = {
+                    index: -1,
+                    pos: 0
+                  } 
+                  break;
+                }
+                if (row[i].letter) {
+                  ans.text += row[i].letter;
+                } else {
+                  ans.text += '-';
+                }
+                row[i].answer.across = {
+                  index: this.answers.across.length,
+                  pos: ans.text.length - 1
+                } 
+              }
+              this.setAnswerFlags(ans);
+              this.answers.across.push(ans);
+            }
+            //Down  
+            if (
+              (r === 0 || this.grid[r - 1][c].isBlock) &&
+              (this.grid[r + 1] && !this.grid[r + 1][c].isBlock)
+            ) {
+              labeled = true;
+              let ans = {
+                label: labelNum,
+                text: ''
+              };
+              for (let i = r; i < this.size; i++) {
+                if (this.grid[i][c].isBlock) {
+                  this.grid[i][c].answer.down = {
+                    index: -1,
+                    pos: 0
+                  }
+                  break;
+                }
+                if (this.grid[i][c].letter) {
+                  ans.text += this.grid[i][c].letter;
+                } else {
+                  ans.text += '-';
+                }
+                this.grid[i][c].answer.down = {
+                  index: this.answers.down.length,
+                  pos: ans.text.length - 1
+                }
+              }
+              this.setAnswerFlags(ans);
+              this.answers.down.push(ans);
+            }
+            if (labeled) {
+              cell.label = labelNum;
+              labelNum++;
+            } else {
+              cell.label = '';
+            }
+          }
+          // Add more clues if necessiary
+          for (let i = this.clues.across.length; i < this.answers.across.length; i++) {
+            this.clues.across.push('');
+          }
+          for (let i = this.clues.down.length; i < this.answers.down.length; i++) {
+            this.clues.down.push('');
+          }
+        });
+      });
+    },
+    
+    // Set button flags for an answer
+    setAnswerFlags: function(ans) {
+      ans.complete = (ans.text.indexOf('-') === -1);
+      ans.solvable = !ans.complete && !!(ans.text.match(/(.*[A-Z].*){2,}/));
+      ans.anagramable = !!(ans.text.match(/(.*[A-Z].*){3,}/));
+    },
+    
+    // Updates the Answers' strings when cell letter changes 
+    updateAnswer: function(cell) {
+      let letter = cell.letter || '-';
+      if (cell.answer.across.index !== -1) {
+        let ans = this.answers.across[cell.answer.across.index];
+        ans.text =
+          ans.text.substring(0, cell.answer.across.pos) +
+          letter +
+          ans.text.substr(cell.answer.across.pos + 1);
+        this.setAnswerFlags(ans);
+      }
+      if (cell.answer.down.index !== -1) {
+        let ans = this.answers.down[cell.answer.down.index];
+        ans.text =
+          ans.text.substring(0, cell.answer.down.pos) +
+          letter +
+          ans.text.substr(cell.answer.down.pos + 1);
+        this.setAnswerFlags(ans);
+      }
+    },
+    
+    // Keyboard listener for the grid
+    cellKey: function(e, cell, r, c) {
+      // Add Letter
+      if (e.keyCode >= 65 && e.keyCode <= 90) {
+        if (cell.isBlock) {
+          this.toggleBlock(cell);
+          this.updateNums();
+        }
+        cell.letter = e.key.toUpperCase();
+        this.updateAnswer(cell);
+        // Simulate left or down key press
+        this.cellKey(
+          {
+            keyCode: this.dirSelect === 'across' ? 39 : 40,
+            preventDefault: ()=>{}
+          },
+          cell, r, c
+        );
+      }
+      
+      // Directional Keys
+      else if (e.keyCode >= 37 && e.keyCode <= 40) {
+        e.preventDefault();
+        if ((e.keyCode === 37 || e.keyCode === 39) && this.dirSelect === 'down') {
+          this.dirSelect = 'across';
+          return;
+        } else if ((e.keyCode === 38 || e.keyCode === 40) && this.dirSelect === 'across') {
+          this.dirSelect = 'down';
+          return;
+        }
+        let row = r,
+            col = c;
+        if (e.keyCode === 37 && c > 0) {
+          col--;
+        } else if (e.keyCode === 38 && r > 0) {
+          row--;
+        } else if (e.keyCode === 39 && c < this.size - 1) {
+          col++;
+        } else if (e.keyCode === 40 && r < this.size - 1) {
+          row++;
+        }
+        this.$refs.grid.childNodes[row].childNodes[col].focus();
+      }
+      
+      // Add blocks
+      else if (e.keyCode === 32 || e.keyCode === 13) {
+        e.preventDefault();
+        this.toggleBlock(cell);
+        this.updateNums();
+      } else if (e.keyCode === 8) {
+        if (cell.isBlock) {
+          this.toggleBlock(cell);
+          this.updateNums();
+        } else if (cell.letter) {
+          cell.letter = '';
         } else {
-          content += `
-            <button class="tool thes preview-hide" onclick="openSite('thes', '${a.answerStr}')">T</button>
-            <button class="tool dict preview-hide" onclick="openSite('dict', '${a.answerStr}')">D</button>
-          `;
+          this.toggleBlock(cell);
+          this.updateNums();
         }
+        this.updateAnswer(cell);
+      }
+    },
+    
+    // Set grid cell to a block and mirror if necessicary
+    toggleBlock: function(cell) {
+      cell.isBlock = !cell.isBlock;
+      if (this.autoMirror) {
+        parentLoop:
+        for (let r = 0; r < this.size; r++) {
+          for (let c = 0; c < this.size; c++) {
+            if (this.grid[r][c] === cell) {
+              let mirrorBlock = this.grid[this.size - 1 - r][this.size - 1 - c];
+              if (mirrorBlock .isBlock !== cell.isBlock) {
+                mirrorBlock.isBlock = !mirrorBlock.isBlock;
+              }
+              break parentLoop;
+            }
+          }
+        }
+      }
+    },
+    
+    // Searches answers on external sites
+    openSite: function(site, answer) {
+      if (site === 'solv') {
+        let url = answer.replace(/ /g, '').replace(/_/g, '-');
+        window.open('https://www.crosswordsolver.org/solve/' + url, '_blank');
+      }
+      if (site === 'dict') {
+        let url = answer.replace(/ |_/g, '');
+        window.open('https://www.dictionary.com/browse/' + url, '_blank');
+      }
+      if (site === 'thes') {
+        let url = answer.replace(/ |_/g, '');
+        window.open('https://www.thesaurus.com/browse/' + url, '_blank');
+      }
+      if (site === 'anag') {
+        let url = answer.replace(/ |_/g, '');
+        window.open('https://new.wordsmith.org/anagram/anagram.cgi?anagram=' + url, '_blank');
+      }
     }
-    content += `
-        <textarea class="clue" placeholder="Clue..." onkeydown="autoSize(this)"></textarea>
-      </li>`;
-    if (a.across) {
-      across.innerHTML += content;
-    } else {
-      down.innerHTML += content;
-    }
-  });
-}
-
-function resize(increase) {
-  size += increase ? 1 : -1;
-  size = Math.max(size, 2);
-  createGrid();
-}
-
-function autoSize(el) {
-  setTimeout(() => {
-    el.style.height = 'auto';
-    el.style.padding = '0px 4px';
-    el.style.height = el.scrollHeight + 'px';
-  }, 0);
-}
-
-function openSite(site, answer) {
-  if (site === 'solv') {
-    let url = answer.replace(/ /g, '').replace(/_/g, '-');
-    window.open('https://www.crosswordsolver.org/solve/' + url, '_blank');
   }
-  if (site === 'dict') {
-    let url = answer.replace(/ |_/g, '');
-    window.open('https://www.dictionary.com/browse/' + url, '_blank');
-  }
-  if (site === 'thes') {
-    let url = answer.replace(/ |_/g, '');
-    window.open('https://www.thesaurus.com/browse/' + url, '_blank');
-  }
-  if (site === 'anag') {
-    let url = answer.replace(/ |_/g, '');
-    window.open('https://new.wordsmith.org/anagram/anagram.cgi?anagram=' + url, '_blank');
-  }
-}
-
-createGrid();
+});
