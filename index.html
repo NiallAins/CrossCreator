@@ -30,7 +30,16 @@
             <button @click="size += 1">+</button>
           </li>
           <li>
-            <button @click="isPreview = !isPreview">Toggle Preview</button>
+            <button @click="isPreview = !isPreview" :class="{ 'preview-hide': isPrinting }">Toggle Preview</button>
+          </li>
+          <li>
+            <button
+              @click="print()"
+              class="preview-show"
+              :class="{ 'preview-hide': isPrinting }"
+            >
+              Print Puzzle
+            </button>
           </li>
           <!-- <li>
             Export as <button> Image </button>
