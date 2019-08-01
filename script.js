@@ -261,19 +261,19 @@ function Answer(num) {
       // Searches answers on external sites
       openSite: function(site, answer) {
         if (site === 'solv') {
-          let url = answer.replace(/ /g, '').replace(/_/g, '-');
+          let url = answer.replace(/ /g, '');
           window.open('https://www.crosswordsolver.org/solve/' + url, '_blank');
         }
         if (site === 'dict') {
-          let url = answer.replace(/ |_/g, '');
+          let url = answer.replace(/ /g, '');
           window.open('https://www.dictionary.com/browse/' + url, '_blank');
         }
         if (site === 'thes') {
-          let url = answer.replace(/ |_/g, '');
+          let url = answer.replace(/ /g, '');
           window.open('https://www.thesaurus.com/browse/' + url, '_blank');
         }
         if (site === 'anag') {
-          let url = answer.replace(/ |_/g, '');
+          let url = answer.replace(/ |-/g, '');
           window.open('https://new.wordsmith.org/anagram/anagram.cgi?anagram=' + url, '_blank');
         }
       }
