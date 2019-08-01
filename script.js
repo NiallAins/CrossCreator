@@ -37,6 +37,7 @@ function Answer(num) {
       title: '',
       autoMirror: true,
       isPreview: false,
+      isPrinting: false,
       grid: [],
       clues: [[], []],
       answers: [[], []],
@@ -279,6 +280,13 @@ function Answer(num) {
           let url = answer.replace(/ |-/g, '');
           window.open('https://new.wordsmith.org/anagram/anagram.cgi?anagram=' + url, '_blank');
         }
+      },
+      
+      // Print finished puzzle
+      print: function() {
+        this.isPrinting = true;
+        setTimeout(() => window.print(), 500);
+        setTimoout(() => this.isPrinting = false, 2000);
       }
     }
   });
