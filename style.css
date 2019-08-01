@@ -80,8 +80,8 @@ td.block {
 }
 #app:not(.preview) td.block:focus {
   box-shadow:
-    inset 0 0 0 40px black,
-    inset 0 0 0 2px dodgerblue;
+    inset 0 0 0 2px dodgerblue,
+    inset 0 0 0 40px black;
 }
 #app:not(.preview)  td.active:not(.block) {
   background-color:  var(--col-focus);
