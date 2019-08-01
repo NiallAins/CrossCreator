@@ -29,13 +29,6 @@ function Answer(num) {
     this.text = this.text.substring(0, pos) + (letter || '-') + this.text.substr(pos + 1);
     this.setFlags();
   };
-
-// Stop keys from scrolling while editing grid
-window.addEventListener("keydown", function(e) {
-  if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-    e.preventDefault();
-  }
-}, false);
   
 let app = new Vue({
     el: '#app',
