@@ -29,8 +29,15 @@ function Answer(num) {
     this.text = this.text.substring(0, pos) + (letter || '-') + this.text.substr(pos + 1);
     this.setFlags();
   };
+
+// Stop keys from scrolling while editing grid
+window.addEventListener("keydown", function(e) {
+  if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+    e.preventDefault();
+  }
+}, false);
   
-  let app = new Vue({
+let app = new Vue({
     el: '#app',
     data: {
       size: 9,
@@ -184,7 +191,6 @@ function Answer(num) {
         }
         // Directional Keys
         else if (e.keyCode >= 37 && e.keyCode <= 40) {
-          e.preventDefault();
           if (
               ((e.keyCode === 37 || e.keyCode === 39) && this.dirSelect) ||
               ((e.keyCode === 38 || e.keyCode === 40) && !this.dirSelect)
@@ -210,7 +216,6 @@ function Answer(num) {
         }
         // Toggle blocks
         else if (e.keyCode === 32) {
-          e.preventDefault();
           this.toggleBlock(cell);
           this.updateNums();
         }
