@@ -155,7 +155,7 @@ function Answer(num) {
       // Change active answer when cell is selected / focused
       cellSelect: function(cell) {
         if (cell.answer[this.dirSelect].index === -1) {
-          this.dirSelect = this.dirSelect ? 1 : 0;
+          this.dirSelect = this.dirSelect ? 0 : 1;
         }
         this.activeAnswer = cell.answer[this.dirSelect].index;
       },
