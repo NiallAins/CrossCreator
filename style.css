@@ -255,7 +255,8 @@ ol li {
   background-color: var(--col-focus);
 }
 
-#app.preview .preview-hide {
+#app.preview .preview-hide,
+#app:not(.preview) .preview-show {
   display: none;
 }
 
