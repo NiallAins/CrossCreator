@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <div id="app" :class="{ preview: isPreview }">
+    <div id="app" :class="{ preview: isPreview }">
     <header>
       <div class="head-tools">
         <ul class="controls">
@@ -77,7 +77,7 @@
             :value="a.label"
             :class="{ 'active': activeAnswer === i && dir === dirSelect }"
           >
-            <span class="preview-hide"> Answer: {{ a.text }} </span>
+            <div class="preview-hide"> Answer: {{ a.text }} </div>
             <button
               v-if="a.anagramable"
               class="tool anag preview-hide"
