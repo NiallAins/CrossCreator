@@ -54,6 +54,9 @@ section, table {
   width: 90%;
   border: none;
 }
+.cross-title:disabled {
+  color: black;
+}
 
 table {
   border-collapse: collapse;
