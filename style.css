@@ -23,7 +23,7 @@ header .head-tools > * {
 header .head-tools textarea {
   width: calc(100% - 220px);
   margin: 16px;
-  min-height: 66px;
+  min-height: 80px;
   border: 1px solid #ddd;
   border-radius: 2px;
   color: #777;
@@ -63,13 +63,13 @@ td {
   font-size: 26px;
   font-family: Helvetica, sans-serif;
 }
-td:focus {
+#app:not(.preview) td:focus {
   box-shadow: inset 0 0 0 2px dodgerblue;
 }
 td.block {
   background-color: black;
 }
-td.active:not(.block) {
+#app:not(.preview)  td.active:not(.block) {
   background-color: #d6e6f5;
 }
 td span {
@@ -191,7 +191,16 @@ button.tool.dict:after {
 
 .clue {
   display: block;
-  width: calc(100% - 4px);
+  width: calc(100% - 20px);
+  min-height: 1em;
+  padding: 4px;
+  border: 1px solid #ddd;
+}
+.active .clue {
+   border: 1px solid #fff;
+}
+#app.preview .clue {
+  border: none;
 }
 
 .across [type=button],
@@ -227,12 +236,12 @@ ol {
   margin-bottom: 24px;
 }
 
-li {
-  padding-left: 10px;
+ol li {
+  padding: 0 0 5px 10px;
 }
 
-li.active,
-li.active textarea {
+#app:not(.preview)  li.active,
+#app:not(.preview)  li.active textarea {
   background-color: #d6e6f5;
 }
 
