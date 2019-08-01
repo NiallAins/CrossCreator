@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <div id="app" :class="{ preview: isPreview }">
+      <div id="app" :class="{ preview: isPreview }">
     <header>
       <div class="head-tools">
         <ul class="controls">
@@ -43,6 +43,7 @@
         placeholder="Puzzle Title"
         type="text"
         v-bind="title"
+        :disabled="isPreview"
       />
     </header>
   
@@ -107,7 +108,10 @@
               D
             </button>
             <div
-              contentEditable="true"
+              :contentEditable="isPreview ? 'false' : 'true'"
+              :autocomplete="isPreview ? 'off' : 'on'"
+              :autocorrect="isPreview ? 'off' : 'on'"
+              :spellcheck="isPreview ? 'off' : 'on'"
               class="clue"
               v-model="clues[dir][i]"
               @focus="activeAnswer = i; dirSelect = dir;"
