@@ -22,6 +22,9 @@
             ><label for="mirrorBlocks">Auto Mirror Blocks</label>
           </li>
           <li class="preview-hide">
+            <i>Spacebar to add blocks</i>
+          </li>
+          <li class="preview-hide">
             Grid Size
             <button @click="size -= 1">-</button>
             <button @click="size += 1">+</button>
@@ -53,10 +56,10 @@
             tabIndex="0"
             :class="{
               'block': cell.isBlock,
-              'active': activeAnswer === cell.answer[dirSelect].index
+              'active': activeAnswer > -1 && activeAnswer === cell.answer[dirSelect].index
             }"
             @keyup="cellKey($event, cell, r, c)"
-            @focus="activeAnswer = cell.answer[dirSelect].index"
+            @focus="cellSelect(cell)"
           >
             <span>{{ cell.label }}</span>
             {{ cell.letter }}
@@ -66,13 +69,13 @@
     </table>
   
   <section>
-      <div v-for="dir in ['across', 'down']" class="col">
-        <h2>{{ dir }}</h2>
+      <div v-for="dir in [0, 1]" class="col">
+        <h2>{{ dir ? 'Down' : 'Across' }}</h2>
         <ol :class="dir">
          <li
             v-for="(a, i) in answers[dir]"
             :value="a.label"
-            :class="{ 'active': dir === dirSelect && activeAnswer === i }"
+            :class="{ 'active': activeAnswer === i && dir === dirSelect }"
           >
             <span class="preview-hide"> Answer: {{ a.text }} </span>
             <button
@@ -103,17 +106,18 @@
             >
               D
             </button>
-            <textarea
+            <div
+              contentEditable="true"
               class="clue"
-              placeholder="Clue..."
               v-model="clues[dir][i]"
-            ></textarea>
+              @focus="activeAnswer = i; dirSelect = dir;"
+            ></div>
           </li>
         </ol>
       </div>
     </section>
   </div>
-
+  
   <script src="./script.js"></script>
 </body>
 
