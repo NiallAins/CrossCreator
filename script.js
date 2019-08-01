@@ -161,6 +161,9 @@ function Answer(num) {
       
       // Keyboard listener for the grid
       cellKey: function(e, cell, r, c) {
+        if (this.isPreview) {
+          return;
+        }
         // Add Letter
         if (e.keyCode >= 65 && e.keyCode <= 90) {
           if (cell.isBlock) {
