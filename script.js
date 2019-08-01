@@ -285,8 +285,8 @@ function Answer(num) {
       // Print finished puzzle
       print: function() {
         this.isPrinting = true;
-        setTimeout(() => window.print(), 500);
-        setTimoout(() => this.isPrinting = false, 2000);
+        setTimeout(() => window.print());
+        setTimeout(() => this.isPrinting = false, 1000);
       }
     }
   });
