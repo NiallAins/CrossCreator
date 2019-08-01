@@ -1,5 +1,5 @@
 body {
-  font-family: "Times New Roman", serif;;
+  font-family: "Times New Roman", serif;
   margin: 0 auto;
   width: 1080px;
   
@@ -78,7 +78,7 @@ td {
 td.block {
   box-shadow: inset 0 0 0 40px black;
 }
-td.block:focus {
+#app:not(.preview) td.block:focus {
   box-shadow:
     inset 0 0 0 40px black,
     inset 0 0 0 2px dodgerblue;
