@@ -2,6 +2,8 @@ body {
   font-family: "Times New Roman", serif;;
   margin: 0 auto;
   width: 1080px;
+  
+  --col-focus: #d6e6f5;
 }
 
 *:focus {
@@ -30,6 +32,10 @@ header .head-tools textarea {
   padding: 8px;
   font-size: 0.9em;
 }
+header .head-tools textarea:focus,
+.cross-title:focus {
+  box-shadow: 0 0 0 2px var(--col-focus);
+}
 
 .col {
   float: left;
@@ -45,7 +51,7 @@ section, table {
 .cross-title {
   margin: 0 10px 20px;
   font-size: 30px;
-  width: 100%;
+  width: 90%;
   border: none;
 }
 
@@ -70,7 +76,7 @@ td.block {
   background-color: black;
 }
 #app:not(.preview)  td.active:not(.block) {
-  background-color: #d6e6f5;
+  background-color:  var(--col-focus);
 }
 td span {
   position: absolute;
@@ -97,6 +103,7 @@ button,
   min-width: 20px;
   line-height: 20px;
   padding: 0 5px;
+  margin-bottom: 5px;
   text-align: center;
 }
 button:hover,
@@ -140,11 +147,11 @@ input[type="checkbox"]:checked+label:after {
   transform: rotate(45deg);
 }
 input[type="checkbox"]+label:hover:before,
-input[type="checkbox"]+label:focus:before {
+input[type="checkbox"]:focus+label:before {
   background-color: black;
 }
 input[type="checkbox"]:checked+label:hover:after,
-input[type="checkbox"]:checked+label:focus:after {
+input[type="checkbox"]:checked:focus+label:after {
   border-color: white;
 }
 
@@ -242,7 +249,7 @@ ol li {
 
 #app:not(.preview)  li.active,
 #app:not(.preview)  li.active textarea {
-  background-color: #d6e6f5;
+  background-color: var(--col-focus);
 }
 
 #app.preview .preview-hide {
@@ -251,4 +258,11 @@ ol li {
 
 #app.preview table input {
   color: #0000;
+}
+
+#app.preview td {
+  color: #0000;
+}
+#app.preview td span {
+  color: black;
 }
