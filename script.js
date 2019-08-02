@@ -21,7 +21,7 @@ function Answer(num) {
 }
   Answer.prototype.setFlags = function() {
     this.complete = (this.text.indexOf('-') === -1);
-    this.solvable = !this.complete && !!(this.text.match(/(.*[A-Z].*){2,}/));
+    this.solvable = !this.complete && !!(this.text.match(/[A-Z]/));
     this.anagramable = !!(this.text.match(/(.*[A-Z].*){3,}/)); 
   };
 
