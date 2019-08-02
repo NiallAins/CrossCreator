@@ -197,9 +197,6 @@ let app = new Vue({
           ) {
             this.dirSelect = this.dirSelect ? 0 : 1;
             this.activeAnswer = cell.answer[this.dirSelect].index;
-            if (!cell.isBlock) {
-              return;
-            }
           }
           let row = r,
               col = c;
