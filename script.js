@@ -30,6 +30,16 @@ function Answer(num) {
     this.setFlags();
   };
   
+// Prevent scrolling on space and arrow keys within grid
+window.onkeydown = function(e) {
+	if (e.target &&
+      (e.target.tagName === 'TD' || e.target.tagName === 'td') &&
+      (e.keyCode === 32 || e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 39 || e.keyCode === 40)
+  ) {
+    	e.preventDefault();
+	}
+}
+
 let app = new Vue({
     el: '#app',
     data: {
@@ -175,10 +185,7 @@ let app = new Vue({
           this.updateAnswer(cell);
           // Simulate left or down key press
           this.cellKey(
-            {
-              keyCode: this.dirSelect ? 40 : 39,
-              preventDefault: ()=>{}
-            },
+            { keyCode: this.dirSelect ? 40 : 39 },
             cell, r, c
           );
         }
@@ -220,13 +227,7 @@ let app = new Vue({
           }
           cell.letter = '';
           // Simulate backspace move
-          this.cellKey(
-            {
-              keyCode: this.dirSelect ? 38 : 37,
-              preventDefault: ()=>{}
-            },
-            cell, r, c
-          );
+          this.cellKey({ keyCode: this.dirSelect ? 38 : 37 }, cell, r, c);
           this.updateAnswer(cell);
         }
       },
