@@ -87,7 +87,7 @@
             :value="a.label"
             :class="{ 'active': activeAnswer === i && dir === dirSelect }"
           >
-            <div class="preview-hide"> Answer: {{ a.text }} </div>
+            <div class="preview-hide"> {{ a.text }} </div>
             <button
               v-if="a.anagramable"
               class="tool anag preview-hide"
