@@ -3,15 +3,15 @@ function Cell() {
     this.label = '';
     this.letter = '';
     this.answer = [
-        { index: -1, pos: -1 }, 
-        { index: -1, pos: -1 } 
+        { index: -1, pos: -1 },
+        { index: -1, pos: -1 }
     ];
 }
-    Cell.prototype.reset = function() {
-        this.label = '';
-        this.answer.forEach(a => a.pos = a.index = -1);
-    };
-    
+Cell.prototype.reset = function () {
+    this.label = '';
+    this.answer.forEach(a => a.pos = a.index = -1);
+};
+
 function Answer(num) {
     this.label = num;
     this.text = '';
@@ -19,17 +19,17 @@ function Answer(num) {
     this.solvalbe = false;
     this.anagramable = false;
 }
-    Answer.prototype.setFlags = function() {
-        this.complete = (this.text.indexOf('-') === -1);
-        this.solvable = !this.complete && !!(this.text.match(/(.*[A-Z].*){2,}/));
-        this.anagramable = (this.text.match(/-/g)?.length || 0) <= 3;
-    };
+Answer.prototype.setFlags = function () {
+    this.complete = (this.text.indexOf('-') === -1);
+    this.solvable = !this.complete && !!(this.text.match(/(.*[A-Z].*){2,}/));
+    this.anagramable = (this.text.match(/-/g)?.length || 0) <= 3;
+};
 
-    Answer.prototype.editLetter = function(pos, letter) {
-        this.text = this.text.substring(0, pos) + (letter || '-') + this.text.substr(pos + 1);
-        this.setFlags();
-    };
-    
+Answer.prototype.editLetter = function (pos, letter) {
+    this.text = this.text.substring(0, pos) + (letter || '-') + this.text.substr(pos + 1);
+    this.setFlags();
+};
+
 let app = new Vue({
     el: '#app',
     data: {
@@ -46,13 +46,13 @@ let app = new Vue({
         dirSelect: 0,
         activeAnswer: -1
     },
-    created: function() {
+    created: function () {
         const [TITLE, SIZE, BLOCKS, CLUES, PLAY_MODE] = this.generateFromEncodedUrl();
-        
+
         this.isPlayMode = PLAY_MODE;
         this.title = TITLE;
         this.size = SIZE;
-        
+
         for (let r = 0; r < this.size; r++) {
             this.grid.push([]);
             for (let c = 0; c < this.size; c++) {
@@ -68,13 +68,13 @@ let app = new Vue({
 
         setTimeout(() => {
             const CLUE_ELS = document.querySelectorAll('.clue');
-            CLUES.forEach((c, ci) =>  CLUE_ELS[ci].innerText = c);
+            CLUES.forEach((c, ci) => CLUE_ELS[ci].innerText = c);
         }, 500);
 
         this.init = true;
     },
     watch: {
-        size: function(current, old) {
+        size: function (current, old) {
             if (old) {
                 // Expand grid
                 if (current > old) {
@@ -91,7 +91,7 @@ let app = new Vue({
                     this.grid.pop();
                     for (let i = 0; i < current; i++) {
                         this.grid[i].pop();
-                    } 
+                    }
                 }
                 this.updateNums();
             }
@@ -99,9 +99,9 @@ let app = new Vue({
     },
     methods: {
         // Updates the numbers and answers whenever the grid layout changes
-        updateNums: function() {
+        updateNums: function () {
             let labelNum = 1;
-            this.answers = [[],[]];
+            this.answers = [[], []];
             this.grid.forEach(row => row.forEach(cell => cell.reset()));
             this.grid.forEach((row, r) => {
                 row.forEach((cell, c) => {
@@ -126,7 +126,7 @@ let app = new Vue({
                                 row[i].answer[0] = {
                                     index: this.answers[0].length,
                                     pos: ans.text.length - 1
-                                } 
+                                }
                             }
                             ans.setFlags();
                             this.answers[0].push(ans);
@@ -172,17 +172,17 @@ let app = new Vue({
                 });
             });
         },
-        
+
         // Change active answer when cell is selected / focused
-        cellSelect: function(cell) {
+        cellSelect: function (cell) {
             if (cell.answer[this.dirSelect].index === -1) {
                 this.dirSelect = this.dirSelect ? 0 : 1;
             }
             this.activeAnswer = cell.answer[this.dirSelect].index;
         },
-        
+
         // Keyboard listener for the grid
-        cellKey: function(e, cell, r, c) {
+        cellKey: function (e, cell, r, c) {
             if (this.isPreview) {
                 return;
             }
@@ -198,7 +198,7 @@ let app = new Vue({
                 this.cellKey(
                     {
                         keyCode: this.dirSelect ? 40 : 39,
-                        preventDefault: ()=>{}
+                        preventDefault: () => { }
                     },
                     cell, r, c
                 );
@@ -206,8 +206,8 @@ let app = new Vue({
             // Directional Keys
             else if (e.keyCode >= 37 && e.keyCode <= 40) {
                 if (
-                        ((e.keyCode === 37 || e.keyCode === 39) && this.dirSelect) ||
-                        ((e.keyCode === 38 || e.keyCode === 40) && !this.dirSelect)
+                    ((e.keyCode === 37 || e.keyCode === 39) && this.dirSelect) ||
+                    ((e.keyCode === 38 || e.keyCode === 40) && !this.dirSelect)
                 ) {
                     this.dirSelect = this.dirSelect ? 0 : 1;
                     this.activeAnswer = cell.answer[this.dirSelect].index;
@@ -216,7 +216,7 @@ let app = new Vue({
                     }
                 }
                 let row = r,
-                        col = c;
+                    col = c;
                 if (e.keyCode === 37 && c > 0) {
                     col--;
                 } else if (e.keyCode === 38 && r > 0) {
@@ -244,7 +244,7 @@ let app = new Vue({
                 this.cellKey(
                     {
                         keyCode: this.dirSelect ? 38 : 37,
-                        preventDefault: ()=>{}
+                        preventDefault: () => { }
                     },
                     cell, r, c
                 );
@@ -253,17 +253,17 @@ let app = new Vue({
         },
 
         // Updates the Answers' strings when cell letter changes 
-        updateAnswer: function(cell) {
+        updateAnswer: function (cell) {
             if (cell.answer[0].index !== -1) {
                 this.answers[0][cell.answer[0].index].editLetter(cell.answer[0].pos, cell.letter);
             }
             if (cell.answer[1].index !== -1) {
-                    this.answers[1][cell.answer[1].index].editLetter(cell.answer[1].pos, cell.letter);
+                this.answers[1][cell.answer[1].index].editLetter(cell.answer[1].pos, cell.letter);
             }
         },
-        
+
         // Set grid cell to a block and mirror if necessicary
-        toggleBlock: function(cell) {
+        toggleBlock: function (cell) {
             cell.isBlock = !cell.isBlock;
             if (this.autoMirror) {
                 parentLoop:
@@ -271,7 +271,7 @@ let app = new Vue({
                     for (let c = 0; c < this.size; c++) {
                         if (this.grid[r][c] === cell) {
                             let mirrorBlock = this.grid[this.size - 1 - r][this.size - 1 - c];
-                            if (mirrorBlock .isBlock !== cell.isBlock) {
+                            if (mirrorBlock.isBlock !== cell.isBlock) {
                                 mirrorBlock.isBlock = !mirrorBlock.isBlock;
                             }
                             break parentLoop;
@@ -280,9 +280,9 @@ let app = new Vue({
                 }
             }
         },
-        
+
         // Searches answers on external sites
-        openSite: function(site, answer) {
+        openSite: function (site, answer) {
             if (site === 'solv') {
                 let url = answer.replace(/ /g, '');
                 window.open('https://www.crosswordsolver.org/solve/' + url, '_blank');
@@ -300,23 +300,23 @@ let app = new Vue({
                 window.open('https://word.tips/unscramble/results/?dictionary=all_en&letters=' + url, '_blank');
             }
         },
-        
+
         // Print finished puzzle
-        print: function() {
+        print: function () {
             this.isPrinting = true;
             setTimeout(() => window.print());
             setTimeout(() => this.isPrinting = false, 1000);
         },
 
-        generateFromEncodedUrl: function() {
+        generateFromEncodedUrl: function () {
             if (window.location.search) {
                 const ARGS = Object.fromEntries(
                     window.location.search
                         .substring(1)
                         .split('&')
                         .map(q => q.split('='))
-                    );
-                
+                );
+
                 if (ARGS.g && ARGS.c) {
                     return [
                         decodeURI(ARGS.t || ''),
@@ -330,7 +330,7 @@ let app = new Vue({
                             .map(c => decodeURI(c)
                                 .replace(/_/g, ' ')
                                 .replace(/~/g, ',')
-                        ),
+                            ),
                         true
                     ];
                 }
@@ -340,30 +340,27 @@ let app = new Vue({
         },
 
         // Encodes puzzle url
-        copyEncodedUrl: function() {
+        copyEncodedUrl: function () {
             const ENCODED =
                 window.location.href
                     .replace(window.location.search, '')
                     .replace(/\/?$/, '?') +
                 encodeURI(
-                    `t=${
-                        this.title
-                    }&g=${
-                        [
-                            this.size,
-                            ...this.grid
-                                .flat()
-                                .map((c, ci) => c.isBlock ? ci : -1)
-                                .filter(c => c !== -1)
-                        ].join(',')
-                    }&c=${
-                        Array
-                            .from(document.querySelectorAll('.clue'))
-                            .map(c => c.innerText
-                                .replace(/ /g, '_')
-                                .replace(/,/g, '~')
-                            )
-                            .join(',')
+                    `t=${this.title
+                    }&g=${[
+                        this.size,
+                        ...this.grid
+                            .flat()
+                            .map((c, ci) => c.isBlock ? ci : -1)
+                            .filter(c => c !== -1)
+                    ].join(',')
+                    }&c=${Array
+                        .from(document.querySelectorAll('.clue'))
+                        .map(c => c.innerText
+                            .replace(/ /g, '_')
+                            .replace(/,/g, '~')
+                        )
+                        .join(',')
                     }`
                 );
 

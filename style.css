@@ -52,12 +52,6 @@ header {
     gap: 32px;
 }
 
-/* @media (max-width: 500px) {
-    .main-container {
-        flex-direction: column;
-    }
-} */
-
 .cross-title {
     margin: 0 10px 20px;
     font-size: 30px;
