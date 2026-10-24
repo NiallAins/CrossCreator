@@ -1,278 +1,295 @@
 body {
-  font-family: "Times New Roman", serif;
-  margin: 0 auto;
-  width: 1080px;
-  
-  --col-focus: #d6e6f5;
+    font-family: "Times New Roman", serif;
+    margin: 0 auto;
+    padding: 32px;
+    max-width: 1024px;
+    
+    --col-focus: #d6e6f5;
 }
 
 *:focus {
-  outline: none;
+    outline: none;
 }
 
 header {
-  text-align: left;
+    text-align: left;
 }
 
-header .head-tools {
-  min-height: 60px;
+.head-tools {
+    display: flex;
 }
 
-header .head-tools > * {
-  float: left;
+.head-tools textarea {
+    margin: 16px;
+    min-height: 80px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    color: #777;
+    padding: 8px;
+    font-size: 0.9em;
 }
-
-header .head-tools textarea {
-  width: calc(100% - 220px);
-  margin: 16px;
-  min-height: 80px;
-  border: 1px solid #ddd;
-  border-radius: 2px;
-  color: #777;
-  padding: 8px;
-  font-size: 0.9em;
-}
-header .head-tools textarea:focus,
+.head-tools textarea:focus,
 .cross-title:focus {
-  box-shadow: 0 0 0 2px var(--col-focus);
+    box-shadow: 0 0 0 2px var(--col-focus);
+}
+
+.cols {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: space-around;
 }
 
 .col {
-  float: left;
-  text-align: left;
-  padding-left: 40px;
-  width: 230px;
+    text-align: left;
+    width: 230px;
 }
 
-section, table {
-  float: left;
+.main-container {
+    display: flex;
+    align-items: start;
+    flex-wrap: wrap;
+    gap: 32px;
 }
+
+/* @media (max-width: 500px) {
+    .main-container {
+        flex-direction: column;
+    }
+} */
 
 .cross-title {
-  margin: 0 10px 20px;
-  font-size: 30px;
-  width: 90%;
-  border: none;
+    margin: 0 10px 20px;
+    font-size: 30px;
+    width: 90%;
+    border: none;
 }
 .cross-title:disabled {
-  color: black;
-  background: white;
+    color: black;
+    background: white;
 }
 
 table {
-  border-collapse: collapse;
-  margin-bottom: 20px;
+    border-collapse: collapse;
+    margin-bottom: 20px;
 }
 td {
-  border: 1px solid black;
-  padding: 0;
-  position: relative;
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  font-size: 26px;
-  font-family: Helvetica, sans-serif;
+    border: 1px solid black;
+    padding: 0;
+    position: relative;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 26px;
+    font-family: Helvetica, sans-serif;
 }
 #app:not(.preview) td:focus {
-  box-shadow: inset 0 0 0 2px dodgerblue;
+    box-shadow: inset 0 0 0 2px dodgerblue;
 }
 td.block {
-  box-shadow: inset 0 0 0 40px black;
+    box-shadow: inset 0 0 0 40px black;
 }
 #app:not(.preview) td.block:focus {
-  box-shadow:
-    inset 0 0 0 2px dodgerblue,
-    inset 0 0 0 40px black;
+    box-shadow:
+        inset 0 0 0 2px dodgerblue,
+        inset 0 0 0 40px black;
 }
-#app:not(.preview)  td.active:not(.block) {
-  background-color:  var(--col-focus);
+#app:not(.preview) td.active:not(.block) {
+    background-color: var(--col-focus);
 }
 td span {
-  position: absolute;
-  top: 5px;
-  left: 5px;
-  font-size: 14px;
-  font-family: "Times New Roman", serif;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    font-size: 14px;
+    font-family: "Times New Roman", serif;
 }
 
 .controls {
-  list-style: none;
-  padding-left: 0;
+    white-space: nowrap;
+    list-style: none;
+    padding-left: 0;
 }
 
 .controls li {
-  padding-bottom: 6px;
+    padding-bottom: 6px;
 }
 
 button,
 [type=button] {
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 2px;
-  min-width: 20px;
-  line-height: 20px;
-  padding: 0 5px;
-  margin-bottom: 5px;
-  text-align: center;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 2px;
+    min-width: 20px;
+    line-height: 20px;
+    padding: 0 5px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 button:hover,
 [type=button]:hover,
 button:focus,
 [type=button]:focus {
-  background: black;
-  color: white;
-  cursor: pointer;
+    background: black;
+    color: white;
+    cursor: pointer;
 }
 
 input[type="checkbox"]+label {
-  cursor: pointer;
-  position: relative;
-  padding-left: 8px;
+    cursor: pointer;
+    position: relative;
+    padding-left: 8px;
 }
 input[type="checkbox"]+label:before {
-  content: '';
-  position: absolute;
-  z-index: 5;
-  left: -18px;
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 1px solid black;
-  border-radius: 2px;
-  background-color: white;
-  vertical-align: middle;
-  cursor: pointer;
+    content: '';
+    position: absolute;
+    z-index: 5;
+    left: -18px;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 1px solid black;
+    border-radius: 2px;
+    background-color: white;
+    vertical-align: middle;
+    cursor: pointer;
 }
 input[type="checkbox"]:checked+label:after {
-  content: '';
-  position: absolute;
-  left: -10px;
-  top: 2px;
-  z-index: 10;
-  border: solid black;
-  border-width: 0 1px 1px 0;
-  width: 4px;
-  height: 11px;
-  transform: rotate(45deg);
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 2px;
+    z-index: 10;
+    border: solid black;
+    border-width: 0 1px 1px 0;
+    width: 4px;
+    height: 11px;
+    transform: rotate(45deg);
 }
 input[type="checkbox"]+label:hover:before,
 input[type="checkbox"]:focus+label:before {
-  background-color: black;
+    background-color: black;
 }
 input[type="checkbox"]:checked+label:hover:after,
 input[type="checkbox"]:checked:focus+label:after {
-  border-color: white;
+    border-color: white;
 }
 
 button.tool {
-  position: relative;
+    position: relative;
+    margin-top: 4px;
 }
 button.tool:after {
-  visibility: hidden;
-  opacity: 0;
-  color: black;
-  background: white;
-  box-shadow: 0 1px 5px #0004;
-  position: absolute;
-  white-space: nowrap;
-  top: 50%;
-  left: 90%;
-  padding: 2px 4px;
-  border-radius: 2px;
-  transition: none;
-  font-size: 0.9em;
+    visibility: hidden;
+    opacity: 0;
+    color: black;
+    background: white;
+    box-shadow: 0 1px 5px #0004;
+    position: absolute;
+    white-space: nowrap;
+    top: 50%;
+    left: 90%;
+    padding: 2px 4px;
+    border-radius: 2px;
+    transition: none;
+    font-size: 0.9em;
 }
 button.tool:hover:after,
 button.tool:focus:after {
-  visibility: visible;
-  opacity: 1;
-  z-index: 10;
-  pointer-events: none;
-  transition:
-    visibility 0s linear 0.8s,
-    opacity 0.2s linear 0.8s;
+    visibility: visible;
+    opacity: 1;
+    z-index: 10;
+    pointer-events: none;
+    transition:
+        visibility 0s linear 0.8s,
+        opacity 0.2s linear 0.8s;
 }
 button.tool.anag:after {
-  content: 'Get Anagrams';
+    content: 'Get Anagrams';
 }
 button.tool.thes:after {
-  content: 'Search Thesaurus';
+    content: 'Search Thesaurus';
 }
 button.tool.solv:after {
-  content: 'Get Solutions';
+    content: 'Get Solutions';
 }
 button.tool.dict:after {
-  content: 'Get Definition';
+    content: 'Get Definition';
 }
 
 .clue {
-  display: block;
-  width: calc(100% - 20px);
-  min-height: 1em;
-  padding: 4px;
-  border: 1px solid #ddd;
+    display: block;
+    width: calc(100% - 20px);
+    min-height: 1em;
+    padding: 4px;
+    border: 1px solid #ddd;
 }
 .active .clue {
-   border: 1px solid #fff;
+     border: 1px solid #fff;
 }
+#app.play-mode .clue,
 #app.preview .clue {
-  border: none;
+    border: none;
 }
 
 .across [type=button],
 .down [type=button] {
-  width: 20px;
-  margin-left: 2px;
-  float: right;
+    width: 20px;
+    margin-left: 2px;
 }
 
 textarea {
-  overflow: hidden;
-  border: none;
-  resize: none;
-  width: calc(100% - 70px);
-  font-family: "Times New Roman";
-  font-size: 16px;
-  height: 18px;
-  margin-bottom: 5px;
+    overflow: hidden;
+    border: none;
+    resize: none;
+    width: calc(100% - 70px);
+    font-family: "Times New Roman";
+    font-size: 16px;
+    height: 18px;
+    margin-bottom: 5px;
 }
 
 h1 {
-  margin: 24px 0 -10px 20px;
+    margin: 24px 0 -10px 20px;
 }
 
 h2, h3 {
-  margin: 0 0 -10px 0;
-  text-transform: capitalize;
-  font-family: Arial;
+    margin: 0 0 -10px 0;
+    text-transform: capitalize;
+    font-family: Arial;
 }
 
 ol {
-  padding-left: 20px;
-  margin-bottom: 24px;
+    padding-left: 20px;
+    margin-bottom: 24px;
 }
 
 ol li {
-  padding: 0 0 5px 10px;
+    padding: 0 0 5px 10px;
 }
 
-#app:not(.preview)  li.active,
-#app:not(.preview)  li.active textarea {
-  background-color: var(--col-focus);
+#app:not(.preview) li.active,
+#app:not(.preview) li.active textarea {
+    background-color: var(--col-focus);
 }
 
+#app.play-mode .preview-hide,
 #app.preview .preview-hide,
-#app:not(.preview) .preview-show {
-  display: none;
+#app:not(.preview):not(.play-mode) .preview-show {
+    display: none;
 }
 
 #app.preview table input {
-  color: #0000;
+    color: #0000;
 }
 
 #app.preview td {
-  color: #0000;
+    color: #0000;
 }
 #app.preview td span {
-  color: black;
+    color: black;
+}
+
+#app.play-mode .head-tools {
+    display: none;
 }

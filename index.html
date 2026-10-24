@@ -2,136 +2,158 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>CrossCreator | A Crossword Maker</title>
-  <link rel="stylesheet" href="./style.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <meta charset="UTF-8">
+    <title>CrossCreator | A Crossword Maker</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
 </head>
 
 <body>
-      <div id="app" :class="{ preview: isPreview }">
-    <header>
-      <div class="head-tools">
-        <ul class="controls">
-          <li class="preview-hide">
+    <div
+        id="app"
+        :class="{
+            'preview': isPreview,
+            'play-mode': isPlayMode
+        }"
+    >
+        <header>
             <input
-              id="mirrorBlocks"
-              type="checkbox"
-              @click="autoMirror = !autoMirror"
-              checked
-            ><label for="mirrorBlocks">Auto Mirror Blocks</label>
-          </li>
-          <li class="preview-hide">
-            <i>Spacebar to add blocks</i>
-          </li>
-          <li class="preview-hide">
-            Grid Size
-            <button @click="size -= 1">-</button>
-            <button @click="size += 1">+</button>
-          </li>
-          <li>
-            <button @click="isPreview = !isPreview" :class="{ 'preview-hide': isPrinting }">Toggle Preview</button>
-          </li>
-          <li>
-            <button
-              @click="print()"
-              class="preview-show"
-              :class="{ 'preview-hide': isPrinting }"
-            >
-              Print Puzzle
-            </button>
-          </li>
-          <!-- <li>
-            Export as <button> Image </button>
-          </li> -->
-        </ul>
-        <textarea class="preview-hide" placeholder="Notes..."></textarea>
-      </div>
-      <input
-        class="cross-title"
-        placeholder="Puzzle Title"
-        type="text"
-        v-bind="title"
-        :disabled="isPreview"
-      />
-    </header>
-  
-    <table id="grid">
-      <tbody ref="grid">
-        <tr v-for="(row, r) in grid">
-          <td
-            v-for="(cell, c) in row"
-            type="text"
-            maxlength="1"
-            tabIndex="0"
-            :class="{
-              'block': cell.isBlock,
-              'active': activeAnswer > -1 && activeAnswer === cell.answer[dirSelect].index
-            }"
-            @keyup="cellKey($event, cell, r, c)"
-            @focus="cellSelect(cell)"
-          >
-            <span>{{ cell.label }}</span>
-            {{ cell.letter }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  
-  <section>
-      <div v-for="dir in [0, 1]" class="col">
-        <h2>{{ dir ? 'Down' : 'Across' }}</h2>
-        <ol :class="dir">
-         <li
-            v-for="(a, i) in answers[dir]"
-            :value="a.label"
-            :class="{ 'active': activeAnswer === i && dir === dirSelect }"
-          >
-            <div class="preview-hide"> Answer: {{ a.text }} </div>
-            <button
-              v-if="a.anagramable"
-              class="tool anag preview-hide"
-              @click="openSite('anag', a.text)"
-            >
-              A
-            </button>
-            <button
-              v-if="a.solvable"
-              class="tool solv preview-hide"
-              @click="openSite('solv', a.text)"
-            >
-              S
-            </button>
-            <button
-              v-if="a.complete"
-              class="tool thes preview-hide"
-              @click="openSite('thes', a.text)"
-            >
-              T
-            </button>
-            <button
-              v-if="a.complete"
-              class="tool dict preview-hide"
-              @click="openSite('dict', a.text)"
-            >
-              D
-            </button>
-            <div
-              :contentEditable="isPreview ? 'false' : 'true'"
-              :autocomplete="isPreview ? 'off' : 'on'"
-              :autocorrect="isPreview ? 'off' : 'on'"
-              :spellcheck="isPreview ? 'off' : 'on'"
-              class="clue"
-              v-model="clues[dir][i]"
-              @focus="activeAnswer = i; dirSelect = dir;"
-            ></div>
-          </li>
-        </ol>
-      </div>
-    </section>
-  </div>
-  
-  <script src="./script.js"></script>
+                class="cross-title"
+                placeholder="Puzzle Title"
+                type="text"
+                v-model="title"
+                :disabled="isPreview || isPlayMode"
+            />
+        </header>
+    
+        <div class="main-container">
+            <table id="grid">
+                <tbody ref="grid">
+                    <tr v-for="(row, r) in grid">
+                        <td
+                            v-for="(cell, c) in row"
+                            type="text"
+                            maxlength="1"
+                            tabIndex="0"
+                            :class="{
+                                'block': cell.isBlock,
+                                'active': activeAnswer > -1 && activeAnswer === cell.answer[dirSelect].index
+                            }"
+                            @keyup="cellKey($event, cell, r, c)"
+                            @focus="cellSelect(cell)"
+                        >
+                            <span>{{ cell.label }}</span>
+                            {{ cell.letter }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        
+            <section class="cols">
+                <div v-for="dir in [0, 1]" class="col">
+                    <h2>{{ dir ? 'Down' : 'Across' }}</h2>
+                    <ol :class="dir">
+                        <li
+                            v-for="(a, i) in answers[dir]"
+                            :value="a.label"
+                            :class="{ 'active': activeAnswer === i && dir === dirSelect }"
+                        >
+                            <div class="preview-hide"> Answer: {{ a.text }} </div>
+                            <button
+                                v-if="a.anagramable"
+                                class="tool anag preview-hide"
+                                @click="openSite('anag', a.text)"
+                            >
+                                Anag
+                            </button>
+                            <button
+                                v-if="a.solvable"
+                                class="tool solv preview-hide"
+                                @click="openSite('solv', a.text)"
+                            >
+                                Solv
+                            </button>
+                            <button
+                                v-if="a.complete"
+                                class="tool thes preview-hide"
+                                @click="openSite('thes', a.text)"
+                            >
+                                Thes
+                            </button>
+                            <button
+                                v-if="a.complete"
+                                class="tool dict preview-hide"
+                                @click="openSite('dict', a.text)"
+                            >
+                                Def
+                            </button>
+                            <div
+                                :contentEditable="isPreview || isPlayMode ? 'false' : 'true'"
+                                :autocomplete="isPreview || isPlayMode ? 'off' : 'on'"
+                                :autocorrect="isPreview || isPlayMode ? 'off' : 'on'"
+                                :spellcheck="isPreview || isPlayMode ? 'off' : 'on'"
+                                class="clue"
+                                v-model="clues[dir][i]"
+                                @focus="activeAnswer = i; dirSelect = dir;"
+                            ></div>
+                        </li>
+                    </ol>
+                </div>
+            </section>
+        </div>
+
+        <section class="head-tools">
+            <ul class="controls">
+                <li class="preview-hide">
+                    <input
+                        id="mirrorBlocks"
+                        type="checkbox"
+                        @click="autoMirror = !autoMirror"
+                        checked
+                    ><label for="mirrorBlocks">Auto Mirror Blocks</label>
+                </li>
+                <li class="preview-hide">
+                    <i>Spacebar to add blocks</i>
+                </li>
+                <li class="preview-hide">
+                    Grid Size
+                    <button @click="size > 2 ? size -= 1 : null">&minus;</button>
+                    <button @click="size += 1">&plus;</button>
+                </li>
+                
+                <li>
+                    <button
+                        @click="print()"
+                        class="preview-show"
+                        :class="{ 'preview-hide': isPrinting }"
+                    >
+                        Print Puzzle
+                    </button>
+                </li>
+                <li>
+                    <button
+                        id="buttonCopy"
+                        class="preview-show"
+                        :class="{ 'preview-hide': isPrinting }"
+                        @click="copyEncodedUrl()"
+                    >
+                        Copy Link to Puzzle
+                    </button>
+                </li>
+                <li>
+                    <button
+                        @click="isPreview = !isPreview"
+                        :class="{ 'preview-hide': isPrinting }"
+                    >
+                        Toggle Preview
+                    </button>
+                </li>
+            </ul>
+            <textarea class="preview-hide" placeholder="Notes..."></textarea>
+        </section>
+    </div>
+    
+    <script src="./script.js"></script>
 </body>
 
 </html>
